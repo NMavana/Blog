@@ -55,20 +55,47 @@ include_once "../includes/connection.php";
 
     if (isset ($_POST[ "signup" ]))
         {
-        $author_name     = mysqli_real_escape_string ( $con, $_POST[ "author_name" ] );
-        $author_email    = mysqli_real_escape_string ( $con, $_POST[ "author_email" ] );
-        $author_password = mysqli_real_escape_string ( $con, $_POST[ "author_password" ] );
+        $author_name     = mysqli_real_escape_string ( $conn, $_POST[ "author_name" ] );
+        $author_email    = mysqli_real_escape_string ( $conn, $_POST[ "author_email" ] );
+        $author_password = mysqli_real_escape_string ( $conn, $_POST[ "author_password" ] );
 
         //Checking for empty field
         if (empty ($author_name) OR empty ($author_email) OR empty ($author_password))
             {
             header ( "Location: signup.php?message=Empty+Fields" );
+            exit ();
             }
 
         //Checking email validity
         if ( ! filter_var ( $author_email, FILTER_VALIDATE_EMAIL ))
             {
             header ( "Location: signup.php?message=Please+enter+valid+email" );
+            exit ();
+            } else
+            {
+            // If email exists
+            $sql2    = "SELECT * FROM `author` WHERE `author_email`='$author_email'";
+            $result = mysqli_query ( $conn, $sql2 );
+            if (mysqli_num_rows ( $result ) > 0)
+                {
+                header ( "Location: signup.php?message=Email+already+exists" );
+                exit ();
+                } else
+                {
+                // Hashing Password
+                $hash = password_hash ( $author_password, PASSWORD_DEFAULT );
+                // Signing up the user
+                $sql = "INSERT INTO `author` (`author_name`, `author_email`, `author_password`, `author_bio`, `author_role`) VALUES ('$author_name', '$author_email', '$hash', 'Enter bio', 'author')";
+                if (mysqli_query ( $conn, $sql ))
+                    {
+                    header ( "Location: signup.php?message=SuccessFully+Registered" );
+                    exit ();
+                    } else
+                    {
+                    header ( "Location: signup.php?message=Registration+Failed" );
+                    exit ();
+                    }
+                }
             }
         } ?>
     <script src="../js/bootstrap.bundle.min.js"></script>
