@@ -35,9 +35,7 @@ include_once "includes/function.php";
         </div>
     </div>
 
-
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scroll.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/scrollspy.js"></script>
 </body>
 </html>
