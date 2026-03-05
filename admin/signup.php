@@ -45,6 +45,10 @@ include_once "../includes/connection.php";
                             placeholder="Enter your password" required>
                     </div>
 
+                    <div class="text-center">
+                        <p class="text-muted">Already Have a acount? <a href="login.php">Log in here</a></p>
+                    </div>
+
 
                     <button type="submit" name="signup" class="btn btn-primary w-100 mb-3">Sign Up</button>
                 </form>

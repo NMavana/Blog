@@ -13,7 +13,7 @@ include_once "includes/function.php";
 </head>
 
 <body>
-    <!--NAV BAR-->
+    <!--NAV BAR START HERE-->
     <?php include_once "includes/nav.php"; ?>
     <!--NAV BAR END HERE-->
 
