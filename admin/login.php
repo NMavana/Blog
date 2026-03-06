@@ -94,7 +94,7 @@ include_once "../includes/connection.php";
                         $_SESSION[ "author_email" ] = $row[ "author_email" ];
                         $_SESSION[ "author_bio" ]   = $row[ "author_bio" ];
                         $_SESSION[ "author_role" ]  = $row[ "author_role" ];
-                        header ( "Location: ../index.php" );
+                        header ( "Location: index.php" );
                         }
                     }
                 }
