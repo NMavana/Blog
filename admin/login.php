@@ -98,7 +98,6 @@ include_once "../includes/connection.php";
                         }
                     }
                 }
-
             }
         } ?>
     <script src="../js/bootstrap.bundle.min.js"></script>

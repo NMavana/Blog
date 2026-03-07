@@ -80,13 +80,40 @@ if (isset ($_SESSION[ "author_role" ]))
                     <div
                         class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">Dashboard</h1>
-                        <h6>Howdy <?php echo$_SESSION["author_name"];?> | Your role is <?php echo$_SESSION["author_role"];?></h6>
+                        <h6>Howdy <?php echo $_SESSION[ "author_name" ]; ?> | Your role is
+                            <?php echo $_SESSION[ "author_role" ]; ?>
+                        </h6>
+                    </div>
 
+                    <div id="admin-index-form">
+                        <h1>Your Profile</h1>
+                        <form>
+                            <div class="mb-3">
+                                <label for="exampleInputText" class="form-label">Name</label>
+                                <input type="text" name="author_name" class="form-control" id="exampleInputText"
+                                    placeholder="Enter Name" value="<?php echo$_SESSION[ "author_name" ]; ?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                <input type="email" name="author_email" class="form-control" id="exampleInputEmail1"
+                                    aria-describedby="emailHelp" placeholder="Enter Email" value="<?php echo$_SESSION[ "author_email" ];?>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label">Password</label>
+                                <input type="password" name="author_password" class="form-control"
+                                    id="exampleInputPassword1" placeholder="Enter Password">
+                            </div>
+                            <div class="mb-3">
+                                <label for="bio" class="form-label">Your Bio</label>
+                                <textarea id="story" name="author_bio" rows="5" cols="33" class="form-control">
+                                    <?php echo$_SESSION["author_bio"];?>       </textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
                     </div>
                 </main>
             </div>
         </div>
-
         <script src="../js/bootstrap.bundle.min.js"></script>
         <script src="../js/scrollspy.js"></script>
     </body>
