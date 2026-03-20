@@ -1,3 +1,5 @@
+# _THIS PROJECT IS UNDER DEVELOPMENT, you might encounter a bug._
+
 ## License
 Blog Website - Copyright (C) 2026 Njatosoa Mavana
 
