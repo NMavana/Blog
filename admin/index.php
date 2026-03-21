@@ -1,4 +1,5 @@
 <?php
+// 175 Created tables for post and categories
 session_start ();
 include_once ("../includes/connection.php");
 
