@@ -1,4 +1,5 @@
 <?php
+// 175 Created tables for post and categories
 session_start ();
 include_once ("../includes/connection.php");
 
@@ -14,7 +15,7 @@ if (isset ($_POST[ "update" ]))
 	//Checking if field are empty
 	if (empty ($author_name) OR empty ($author_email) OR empty ($author_bio))
 		{
-		echo "Empty Fields";
+		header ( "Location: index.php?message=Empty+Fields" );
 		} else
 		{
 		// CHecking if email is valid
@@ -42,6 +43,17 @@ if (isset ($_POST[ "update" ]))
 				} else
 				{
 				//user wants to change his password
+				$hash      = password_hash ( $author_password, PASSWORD_DEFAULT );
+				$author_id = $_SESSION[ 'author_id' ];
+				$sql       = "UPDATE `author` SET `author_name`= '$author_name', `author_email`='$author_email', `author_bio`='$author_bio', `author_password` = '$hash' WHERE `author_id`='$author_id'";
+				if (mysqli_query ( $conn, $sql ))
+					{
+					session_destroy();
+					header ( "Location: login.php?message=Record+Updated+You+may+login+again" );
+					} else
+					{
+					echo "error";
+					}
 				}
 			}
 		}

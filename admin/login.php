@@ -1,6 +1,55 @@
 <?php
 session_start ();
 include_once "../includes/connection.php";
+
+if (isset ($_POST[ "signup" ]))
+    {
+    $author_email    = mysqli_real_escape_string ( $conn, $_POST[ "author_email" ] );
+    $author_password = mysqli_real_escape_string ( $conn, $_POST[ "author_password" ] );
+
+    //Checking for empty field
+    if (empty ($author_email) OR empty ($author_password))
+        {
+        header ( "Location: login.php?message=Empty+Fields" );
+        exit ();
+        }
+
+    //Checking email validity
+    if ( ! filter_var ( $author_email, FILTER_VALIDATE_EMAIL ))
+        {
+        header ( "Location: login.php?message=Please+enter+valid+email" );
+        exit ();
+        } else
+        {
+        $sql    = "SELECT * FROM `author` WHERE `author_email`='$author_email'";
+        $result = mysqli_query ( $conn, $sql );
+        // If email doesn't  exists
+        if (mysqli_num_rows ( $result ) <= 0)
+            {
+            header ( "Location: login.php?message=Login+error" );
+            exit ();
+            } else
+            {
+            while ($row = mysqli_fetch_assoc ( $result ))
+                {
+                //Checking if password matches
+                if ( ! password_verify ( $author_password, $row[ "author_password" ] ))
+                    {
+                    header ( "Location: login.php?message=Incorrect+Password" );
+                    exit ();
+                    } else if (password_verify ( $author_password, $row[ "author_password" ] ))
+                    {
+                    $_SESSION[ "author_id" ]    = $row[ "author_id" ];
+                    $_SESSION[ "author_name" ]  = $row[ "author_name" ];
+                    $_SESSION[ "author_email" ] = $row[ "author_email" ];
+                    $_SESSION[ "author_bio" ]   = $row[ "author_bio" ];
+                    $_SESSION[ "author_role" ]  = $row[ "author_role" ];
+                    header ( "Location: index.php" );
+                    }
+                }
+            }
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,56 +99,7 @@ include_once "../includes/connection.php";
             </div>
         </div>
     </div>
-    <?php
 
-    if (isset ($_POST[ "signup" ]))
-        {
-        $author_email    = mysqli_real_escape_string ( $conn, $_POST[ "author_email" ] );
-        $author_password = mysqli_real_escape_string ( $conn, $_POST[ "author_password" ] );
-
-        //Checking for empty field
-        if (empty ($author_email) OR empty ($author_password))
-            {
-            header ( "Location: login.php?message=Empty+Fields" );
-            exit ();
-            }
-
-        //Checking email validity
-        if ( ! filter_var ( $author_email, FILTER_VALIDATE_EMAIL ))
-            {
-            header ( "Location: login.php?message=Please+enter+valid+email" );
-            exit ();
-            } else
-            {
-            $sql    = "SELECT * FROM `author` WHERE `author_email`='$author_email'";
-            $result = mysqli_query ( $conn, $sql );
-            // If email doesn't  exists
-            if (mysqli_num_rows ( $result ) <= 0)
-                {
-                header ( "Location: login.php?message=Login+error" );
-                exit ();
-                } else
-                {
-                while ($row = mysqli_fetch_assoc ( $result ))
-                    {
-                    //Checking if password matches
-                    if ( ! password_verify ( $author_password, $row[ "author_password" ] ))
-                        {
-                        header ( "Location: login.php?message=Incorrect+Password" );
-                        exit ();
-                        } else if (password_verify ( $author_password, $row[ "author_password" ] ))
-                        {
-                        $_SESSION[ "author_id" ]    = $row[ "author_id" ];
-                        $_SESSION[ "author_name" ]  = $row[ "author_name" ];
-                        $_SESSION[ "author_email" ] = $row[ "author_email" ];
-                        $_SESSION[ "author_bio" ]   = $row[ "author_bio" ];
-                        $_SESSION[ "author_role" ]  = $row[ "author_role" ];
-                        header ( "Location: index.php" );
-                        }
-                    }
-                }
-            }
-        } ?>
     <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 
