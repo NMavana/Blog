@@ -1,5 +1,5 @@
 <?php
-
+// 177 Finished
 session_start ();
 include_once ("../includes/connection.php");
 //ADD POST TO THE DB START HERE
