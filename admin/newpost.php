@@ -3,6 +3,15 @@
 session_start ();
 include_once ("../includes/connection.php");
 
+if (isset ($_POST[ "submit" ]))
+    {
+
+    $post_title    = mysqli_real_escape_string ( $conn, $_POST[ "post_title" ] );
+    $post_category = mysqli_real_escape_string ( $conn, $_POST[ "post_category" ] );
+    $post_content  = mysqli_real_escape_string ( $conn, $_POST[ "post_content" ] );
+    $post_keyword  = mysqli_real_escape_string ( $conn, $_POST[ "post_keyword" ] );
+    }
+
 if (isset ($_SESSION[ "author_role" ]))
     {
     ?>
@@ -71,7 +80,9 @@ if (isset ($_SESSION[ "author_role" ]))
                                     while ($row = mysqli_fetch_assoc ( $result ))
                                         {
                                         ?>
-                                        <option value="<?php echo $row['category_id']?>"><?php echo $row['category_name']?></option>
+                                        <option value="<?php echo $row[ 'category_id' ] ?>">
+                                            <?php echo $row[ 'category_name' ] ?>
+                                        </option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -96,7 +107,7 @@ if (isset ($_SESSION[ "author_role" ]))
                                     placeholder="Enter Keywords">
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                         </form>
 
                     </div>
