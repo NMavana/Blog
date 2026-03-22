@@ -2,7 +2,7 @@
 
 session_start ();
 include_once ("../includes/connection.php");
-
+//ADD POST TO THE DB START HERE
 if (isset ($_POST[ "submit" ]))
     {
 
@@ -10,8 +10,64 @@ if (isset ($_POST[ "submit" ]))
     $post_category = mysqli_real_escape_string ( $conn, $_POST[ "post_category" ] );
     $post_content  = mysqli_real_escape_string ( $conn, $_POST[ "post_content" ] );
     $post_keyword  = mysqli_real_escape_string ( $conn, $_POST[ "post_keyword" ] );
-    }
+    $post_author   = $_SESSION[ "author_id" ];
+    $post_date     = date ( "d/M/y" );
 
+    //checking if above fields are empty
+    if (empty ($post_title) OR empty ($post_category) OR empty ($post_content))
+        {
+        header ( "Location: newpost.php?message=Empty+fields" );
+        }
+
+    //FILE UPLOAD ALGO START HERE
+    $file = $_FILES[ "file" ];
+
+    $fileName = $file[ "name" ];
+    $fileType = $file[ "type" ];
+    $fileTmp  = $file[ "tmp_name" ];
+    $fileErr  = $file[ "error" ];
+    $fileSize = $file[ "size" ];
+
+    $fileEXT       = explode ( ".", $fileName );
+    $fileExtension = strtolower ( end ( $fileEXT ) );
+
+    $allowedExt = array( "jpg", "jpeg", "png", "gif" );
+    if (in_array ( $fileExtension, $allowedExt ))
+        {
+        if ($fileErr === 0)
+            {
+            if ($fileSize < 3000000)
+                {
+                $newFileName   = uniqid ( '', true ) . '.' . $fileExtension;
+                $destination   = "../upload/$newFileName";
+                $dbdestination = "upload/$newFileName";
+                move_uploaded_file ( $fileTmp, $destination );
+
+                $sql = "insert into `post` (post_title, post_content, post_category, post_author, post_date, post_keyword, post_image) values ('$post_title', '$post_content', '$post_category', '$post_author', '$post_date', '$post_keyword','$dbdestination')";
+                if (mysqli_query ( $conn, $sql ))
+                    {
+                    header ( "Location: post.php?message=Post+Published" );
+                    } else
+                    {
+                    header ( "Location: newpost.php?message=Error" );
+                    }
+                } else
+                {
+                header ( "Location: newpost.php?message=YOUR+FILE+IS+TOO+BIG+TO+UPLOAD" );
+                }
+            } else
+            {
+            header ( "Location: newpost.php?message=Oops+Error+While+Uploading+your+file" );
+            }
+        } else
+        {
+        header ( "Location: newpost.php?message=You+have+Uploaded+a+wrong+file!" );
+        }
+    //FILE UPLOAD ALGO END HERE //
+    }
+//ADD POST TO THE DB END HERE
+
+//  //
 if (isset ($_SESSION[ "author_role" ]))
     {
     ?>
@@ -63,7 +119,7 @@ if (isset ($_SESSION[ "author_role" ]))
                     </div>
 
                     <div id="admin-index-form">
-                        <form enctype="multipart/form-data">
+                        <form  method="post" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
                                 <input type="text" class="form-control" id="title" name="post_title"
